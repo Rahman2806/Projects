@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html>
+<head>    
+    <title>EMI Calculator</title>
+    <link rel="stylesheet" href="EMI Calculation.css">    
+</head>
+<body>
+    <form class="container">
+        <img class="img" src="https://prognamik.in/wp-content/uploads/2021/03/brassyacademy.png" alt="Logo">
+        <p class="heading">EMI Calculator</p>
+        
+        <div class="input-container">
+            <label for="amount">Loan Amount(₹)</label>
+            <input type="number" id="amount" required>            
+        </div>
+
+        <div class="input-container">
+            <label for="interest">Interest Rate(%)</label>
+            <input type="number" id="interest" step="0.01" required>            
+        </div>
+
+        <div class="input-container loan-tenure-container">
+            <label for="loanTenure">Loan Tenure</label>
+            <input type="text" id="loanTenure" required>            
+            <div class="radio-container">            
+                <input type="radio" name="btn" id="year"><label for="year">Year</label>
+                <input type="radio" name="btn" id="month"><label for="month">Month</label>
+            </div>
+        </div>
+
+        <div class="submit-container">
+            <input type="submit" value="Submit" id="calculate">            
+        </div>
+        
+        <div class="output">
+            <p >Loan EMI <span id="emi">₹</span></p>
+            <p >Total Interest Payable <span id="totalInterest">₹</span></p>
+            <p >Total Payment(Principal + Interest)<span id="totalPayment">₹</span> </p> 
+        </div>
+    </form>
+
+    <script>
+        let loanAmount = document.getElementById("amount");
+        let interestRate=document.getElementById("interest");
+        let loanDuration = document.getElementById("loanTenure");
+        let submit = document.getElementById("calculate");
+
+submit.addEventListener('click',(e)=>{
+    e.preventDefault();
+    calculateEMI();
+})
+
+function calculateEMI(){
+
+    let isYear = document.getElementById("year").checked;
+    let isMonth = document.getElementById("month").checked;
+    let noOfMonths=0;
+    if(isYear=="" && isMonth==""){
+        alert("Please select loan tenure type-> Month or year");
+    }else{
+        if(isYear==true){
+            noOfMonths=loanDuration.value * 12 ;
+        }else{
+            noOfMonths=loanDuration.value;
+        }
+        let r = parseFloat(interestRate.value)/12/100;
+        let P = loanAmount.value;
+        let n = noOfMonths;
+
+        let EMI = (P*r* Math.pow((1+r),n)) / (Math.pow((1+r),n)-1);
+        let totalInterest =(EMI * n) - P;
+        let totalPayment  = totalInterest + parseFloat(P);
+        document.getElementById("emi").innerText = "₹" + Math.round(EMI);
+        document.getElementById("totalInterest").innerText="₹" + Math.round(totalInterest);
+        document.getElementById("totalPayment").innerText="₹" + Math.round(totalPayment) ;
+
+    }
+}
+    </script>
+</body>
+</html>
